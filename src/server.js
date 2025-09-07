@@ -117,6 +117,15 @@ app.get('/api', (req, res) => {
   })
 })
 
+// Welcome route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to the Student Panel Backend API!',
+    status: 'OK',
+    docs: '/api'
+  });
+});
+
 // 404 handler
 app.use(notFound)
 
