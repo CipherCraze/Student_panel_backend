@@ -42,13 +42,25 @@ app.use(helmet({
 }))
 
 // CORS configuration
+const allowedOrigins = [
+  'https://student-panel-frontend-eight.vercel.app',
+  'https://student-panel-frontend-q1q9sldt4-noel-manojs-projects.vercel.app',
+  'http://localhost:5173'
+];
+
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.CORS_ORIGIN_PROD 
-    : process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200
-}
+};
 app.use(cors(corsOptions))
 
 // Rate limiting (apply to public/core endpoints, not to admin DB explorer)
